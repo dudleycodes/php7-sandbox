@@ -1,0 +1,45 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Create Apache Container",
+            "type": "shell",
+            "command": "docker stop php-sandbox; docker run -it --name php-sandbox --rm -p 50525:80 -v ./source/:/var/www/html/ php:apache;",
+            "windows": {
+                "command": "docker stop php-sandbox; docker run -it --name php-sandbox --rm -p 50525:80 -v $pwd/source/:/var/www/html/ php:apache;"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            }
+        },
+        {
+            "label": "Open in Chrome",
+            "dependsOn": "Create Apache Container",
+            "command": "Chrome",
+            "windows": {
+                "command": "C:/Program Files (x86)/Google/Chrome/Application/chrome.exe"
+            },
+            "args": ["http://localhost:50525/phpinfo.php"],
+            "group": "build"
+        },
+        {
+            "label": "Open in Firefox",
+            "dependsOn": "Create Apache Container", 
+            "command": "Firefox",
+            "windows": {
+                "command": "C:/Program Files/Mozilla Firefox/firefox.exe"                
+            },
+            "args": [
+                "http://localhost:50525/phpinfo.php"
+            ],
+            "group": "build"
+        }
+    ]
+}
